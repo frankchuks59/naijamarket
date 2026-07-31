@@ -26,7 +26,7 @@ SECRET_KEY = config('SECRET_KEY', default='your-secret-key-change-in-production'
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 # SECURITY settings for production
-if not DEBUG:
+if not DEBUG and os.getenv('RENDER'):
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
