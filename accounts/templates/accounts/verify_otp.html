@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Verify OTP - NaijaMarket{% endblock %}
+
+{% block content %}
+<section class="py-5" style="background: linear-gradient(135deg, #003319 0%, #006633 100%); min-height: 100vh;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-shield-lock fs-1 text-success"></i>
+                            <h3 class="fw-bold mt-3">Verify Your Email</h3>
+                            <p class="text-muted">
+                                We sent a 6-digit code to <strong>{{ user.email }}</strong>
+                            </p>
+                        </div>
+
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+
+                        <form method="POST">
+                            {% csrf_token %}
+
+                            <div class="mb-4">
+                                <label class="form-label text-center d-block">Enter 6-Digit OTP Code</label>
+                                <input type="text" name="otp_code" class="form-control text-center" maxlength="6"
+                                    pattern="[0-9]{6}" placeholder="000000" required
+                                    style="font-size: 1.5rem; letter-spacing: 10px;">
+                                <small class="text-muted d-block mt-2">
+                                    <i class="bi bi-clock"></i> Code expires in 5 minutes
+                                </small>
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100 py-2 fw-bold">
+                                Verify & Continue
+                            </button>
+                        </form>
+
+                        <hr class="my-4">
+
+                        <div class="text-center">
+                            <p class="mb-2">Didn't receive the code?</p>
+                            <a href="{% url 'accounts:resend_otp' %}" class="btn btn-outline-success">
+                                <i class="bi bi-arrow-clockwise"></i> Resend OTP
+                            </a>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <a href="{% url 'accounts:register' %}" class="text-muted">
+                                <i class="bi bi-arrow-left"></i> Back to Registration
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,327 @@
+/* NaijaMarket Custom Styles */
+
+:root {
+    --primary-green: #006633;
+    --dark-green: #003319;
+    --gold: #FFD700;
+    --gold-orange: #FFA500;
+    --cream: #FFF8F0;
+    --text-dark: #1a1a1a;
+}
+
+body {
+    background-color: var(--cream);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar */
+.navbar-custom {
+    background: linear-gradient(135deg, var(--dark-green) 0%, var(--primary-green) 100%);
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: white !important;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    color: var(--gold) !important;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, rgba(0, 51, 25, 0.95), rgba(0, 102, 51, 0.85)),
+        url('https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=1920');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 100px 0;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+}
+
+.hero-title .highlight {
+    color: var(--gold);
+}
+
+/* Stats Cards */
+.stats-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 25px;
+    color: white;
+}
+
+.stats-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--gold);
+}
+
+/* Search Box */
+.search-box {
+    background: white;
+    border-radius: 50px;
+    padding: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.search-box input {
+    border: none;
+    padding: 15px 25px;
+    font-size: 1rem;
+}
+
+.search-box .btn-success {
+    border-radius: 50px;
+    padding: 12px 40px;
+    font-weight: 600;
+    background: var(--primary-green);
+    border: none;
+}
+
+/* Product Cards */
+.product-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 100%;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.product-image {
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.product-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-top-seller {
+    background: var(--primary-green);
+    color: white;
+}
+
+.badge-verified {
+    background: #0066cc;
+    color: white;
+}
+
+.badge-popular {
+    background: var(--gold-orange);
+    color: white;
+}
+
+.product-card-body {
+    padding: 20px;
+}
+
+.product-category {
+    color: var(--text-light);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.product-title {
+    font-weight: 600;
+    margin: 8px 0;
+    color: var(--text-dark);
+}
+
+.product-seller {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.product-rating {
+    color: var(--gold-orange);
+    font-size: 0.9rem;
+}
+
+.product-location {
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
+.product-price {
+    color: var(--primary-green);
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.delivery-badge {
+    background: #e8f5e9;
+    color: var(--primary-green);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Section Headings */
+.section-label {
+    color: var(--primary-green);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+/* How It Works */
+.how-it-works {
+    background: white;
+    padding: 80px 0;
+}
+
+.step-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--cream);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.step-icon.seller {
+    background: #FFF3E0;
+}
+
+/* AI Section */
+.ai-section {
+    background: var(--dark-green);
+    color: white;
+    padding: 80px 0;
+}
+
+.ai-chat-box {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+}
+
+.chat-message {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px 20px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+}
+
+.chat-message.user {
+    background: var(--gold-orange);
+    color: white;
+    margin-left: 50px;
+}
+
+/* Testimonials */
+.testimonial-card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* CTA Section */
+.cta-section {
+    background: var(--cream);
+    padding: 80px 0;
+    text-align: center;
+}
+
+.btn-primary-green {
+    background: var(--primary-green);
+    color: white;
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-weight: 600;
+    border: none;
+}
+
+.btn-primary-green:hover {
+    background: var(--dark-green);
+    color: white;
+}
+
+.btn-outline-green {
+    background: transparent;
+    color: var(--primary-green);
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-weight: 600;
+    border: 2px solid var(--primary-green);
+}
+
+.btn-outline-green:hover {
+    background: var(--primary-green);
+    color: white;
+}
+
+/* Footer */
+.footer {
+    background: var(--dark-green);
+    color: white;
+    padding: 60px 0 30px;
+}
+
+.footer a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: var(--gold);
+}
+
+/* WhatsApp Float Button */
+.whatsapp-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #25D366;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}

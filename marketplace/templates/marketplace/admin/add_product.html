@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin - Add Product{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-custom">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="bi bi-shop"></i> NaijaMarket Admin
+        </a>
+        <div>
+            <a href="{% url 'marketplace:admin_product_list' %}" class="btn btn-outline-light">Back to Admin</a>
+        </div>
+    </div>
+</nav>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-header bg-success text-white py-3">
+                        <h4 class="mb-0"><i class="bi bi-plus-circle"></i> Admin: Add Product</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            <!-- Assign to Seller -->
+                            <div class="card bg-warning bg-opacity-10 mb-3">
+                                <div class="card-body">
+                                    <h6 class="fw-bold"><i class="bi bi-person"></i> Assign to Seller</h6>
+                                    <select name="seller" class="form-select">
+                                        <option value="">-- Select Seller (or leave empty for yourself) --</option>
+                                        {% for seller in sellers %}
+                                        <option value="{{ seller.id }}">{{ seller.username }} - {{
+                                            seller.seller_profile.business_name|default:"No business name" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Product Name *</label>
+                                {{ form.name }}
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Category *</label>
+                                    {{ form.category }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Price (₦) *</label>
+                                    {{ form.price }}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Description *</label>
+                                {{ form.description }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Product Image</label>
+                                {{ form.image }}
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">State *</label>
+                                    {{ form.state }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Location/Area *</label>
+                                    {{ form.location }}
+                                </div>
+                            </div>
+
+                            <div class="card bg-light mb-3">
+                                <div class="card-body">
+                                    <h6 class="card-title fw-bold"><i class="bi bi-truck"></i> Delivery Options</h6>
+                                    <div class="form-check mb-2">
+                                        {{ form.offers_delivery }}
+                                        <label class="form-check-label">I offer delivery services</label>
+                                    </div>
+                                    <div id="deliveryFeeBox">
+                                        <label class="form-label">Delivery Fee (₦)</label>
+                                        {{ form.delivery_fee }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-check mb-4">
+                                {{ form.stock_available }}
+                                <label class="form-check-label">Product is in stock</label>
+                            </div>
+
+                            <!-- Admin Flags -->
+                            <div class="card bg-info bg-opacity-10 mb-3">
+                                <div class="card-body">
+                                    <h6 class="fw-bold"><i class="bi bi-shield-check"></i> Admin Flags</h6>
+                                    <div class="form-check">
+                                        <input type="checkbox" name="is_featured" class="form-check-input"
+                                            id="is_featured">
+                                        <label class="form-check-label" for="is_featured">Featured Product (show on
+                                            homepage)</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" name="is_verified" class="form-check-input"
+                                            id="is_verified" checked>
+                                        <label class="form-check-label" for="is_verified">Verified Product</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-success btn-lg px-4">
+                                    <i class="bi bi-check-circle"></i> Create Product
+                                </button>
+                                <a href="{% url 'marketplace:admin_product_list' %}"
+                                    class="btn btn-outline-secondary btn-lg px-4">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Show/Hide Delivery Fee
+    document.querySelector('#{{ form.offers_delivery.id_for_label }}').addEventListener('change', function () {
+        document.getElementById('deliveryFeeBox').style.display = this.checked ? 'block' : 'none';
+    });
+</script>
+{% endblock %}

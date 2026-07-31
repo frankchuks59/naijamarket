@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Add Product - NaijaMarket{% endblock %}
+
+{% block content %}
+<!-- Navbar -->
+<nav class="navbar navbar-custom">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="bi bi-shop"></i> NaijaMarket
+        </a>
+        <div>
+            <a href="{% url 'marketplace:home' %}" class="btn btn-outline-light">Home</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Add Product Form -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-header bg-success text-white py-3">
+                        <h4 class="mb-0"><i class="bi bi-plus-circle"></i> Add New Product</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss {{ message }} <button type="button"
+                                class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            <!-- Product Name -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Product Name *</label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                <div class="text-danger small">{{ form.name.errors }}</div>
+                                {% endif %}
+                                <small class="text-muted">Be specific (e.g., "Fresh Organic Tomatoes 50kg")</small>
+                            </div>
+
+                            <!-- Category & Price -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Category *</label>
+                                    {{ form.category }}
+                                    {% if form.category.errors %}
+                                    <div class="text-danger small">{{ form.category.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Price (₦) *</label>
+                                    {{ form.price }}
+                                    {% if form.price.errors %}
+                                    <div class="text-danger small">{{ form.price.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Description *</label>
+                                {{ form.description }}
+                                {% if form.description.errors %}
+                                <div class="text-danger small">{{ form.description.errors }}</div>
+                                {% endif %}
+                                <small class="text-muted">Include quality, quantity, and any special features</small>
+                            </div>
+
+                            <!-- Product Image -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Product Image</label>
+                                {{ form.image }}
+                                {% if form.image.errors %}
+                                <div class="text-danger small">{{ form.image.errors }}</div>
+                                {% endif %}
+                                <small class="text-muted">Upload a clear photo (JPG, PNG - max 5MB)</small>
+
+                                <!-- Image Preview -->
+                                <div id="imagePreview" class="mt-2" style="display: none;">
+                                    <img id="previewImg" src="" alt="Preview" class="img-thumbnail"
+                                        style="max-height: 200px;">
+                                </div>
+                            </div>
+
+                            <!-- Location -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">State *</label>
+                                    <select name="state" class="form-select" required>
+                                        <option value="">Select State</option>
+                                        <option value="Lagos">Lagos</option>
+                                        <option value="Abuja">Abuja</option>
+                                        <option value="Kano">Kano</option>
+                                        <option value="Rivers">Rivers</option>
+                                        <option value="Oyo">Oyo</option>
+                                        <option value="Anambra">Anambra</option>
+                                        <option value="Delta">Delta</option>
+                                        <option value="Kaduna">Kaduna</option>
+                                        <option value="Enugu">Enugu</option>
+                                        <option value="Ogun">Ogun</option>
+                                        <option value="Imo">Imo</option>
+                                        <option value="Kogi">Kogi</option>
+                                        <option value="Edo">Edo</option>
+                                        <option value="Akwa Ibom">Akwa Ibom</option>
+                                        <option value="Ondo">Ondo</option>
+                                        <option value="Osun">Osun</option>
+                                        <option value="Plateau">Plateau</option>
+                                        <option value="Benue">Benue</option>
+                                        <option value="Niger">Niger</option>
+                                        <option value="Bauchi">Bauchi</option>
+                                        <option value="Kwara">Kwara</option>
+                                        <option value="Sokoto">Sokoto</option>
+                                        <option value="Adamawa">Adamawa</option>
+                                        <option value="Taraba">Taraba</option>
+                                        <option value="Yobe">Yobe</option>
+                                        <option value="Borno">Borno</option>
+                                        <option value="Gombe">Gombe</option>
+                                        <option value="Zamfara">Zamfara</option>
+                                        <option value="Kebbi">Kebbi</option>
+                                        <option value="Jigawa">Jigawa</option>
+                                        <option value="Katsina">Katsina</option>
+                                        <option value="Abia">Abia</option>
+                                        <option value="Bayelsa">Bayelsa</option>
+                                        <option value="Cross River">Cross River</option>
+                                        <option value="Ebonyi">Ebonyi</option>
+                                        <option value="Ekiti">Ekiti</option>
+                                        <option value="Nasarawa">Nasarawa</option>
+                                    </select>
+                                    {% if form.state.errors %}
+                                    <div class="text-danger small">{{ form.state.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Location/Area *</label>
+                                    {{ form.location }}
+                                    {% if form.location.errors %}
+                                    <div class="text-danger small">{{ form.location.errors }}</div>
+                                    {% endif %}
+                                    <small class="text-muted">e.g., Mile 12 Market, Lagos</small>
+                                </div>
+                            </div>
+
+                            <!-- Delivery Options -->
+                            <div class="card bg-light mb-3">
+                                <div class="card-body">
+                                    <h6 class="card-title fw-bold"><i class="bi bi-truck"></i> Delivery Options</h6>
+
+                                    <div class="form-check mb-2">
+                                        {{ form.offers_delivery }}
+                                        <label class="form-check-label" for="{{ form.offers_delivery.id_for_label }}">
+                                            I offer delivery services
+                                        </label>
+                                    </div>
+
+                                    <div id="deliveryFeeBox" style="display: none;">
+                                        <label class="form-label">Delivery Fee (₦)</label>
+                                        {{ form.delivery_fee }}
+                                        {% if form.delivery_fee.errors %}
+                                        <div class="text-danger small">{{ form.delivery_fee.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Stock Status -->
+                            <div class="form-check mb-4">
+                                {{ form.stock_available }}
+                                <label class="form-check-label" for="{{ form.stock_available.id_for_label }}">
+                                    Product is currently in stock
+                                </label>
+                            </div>
+
+                            <!-- Submit Buttons -->
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-success btn-lg px-4">
+                                    <i class="bi bi-check-circle"></i> Publish Product
+                                </button>
+                                <a href="{% url 'accounts:dashboard' %}" class="btn btn-outline-secondary btn-lg px-4">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Tips Card -->
+                <div class="card border-0 shadow mt-4">
+                    <div class="card-body">
+                        <h6 class="fw-bold"><i class="bi bi-lightbulb text-warning"></i> Tips for Better Sales</h6>
+                        <ul class="mb-0">
+                            <li>Use clear, high-quality photos</li>
+                            <li>Write detailed descriptions</li>
+                            <li>Price competitively</li>
+                            <li>Offer delivery when possible</li>
+                            <li>Keep your stock status updated</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Image Preview
+    document.getElementById('{{ form.image.id_for_label }}').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('previewImg').src = e.target.result;
+                document.getElementById('imagePreview').style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Show/Hide Delivery Fee
+    document.getElementById('{{ form.offers_delivery.id_for_label }}').addEventListener('change', function () {
+        document.getElementById('deliveryFeeBox').style.display = this.checked ? 'block' : 'none';
+    });
+</script>
+{% endblock %}

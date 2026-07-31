@@ -1,0 +1,537 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NaijaMarket - Find Any Goods, Anywhere in Nigeria</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-shop"></i> NaijaMarket
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'marketplace:home' %}">Marketplace</a>
+                    </li>
+                    {% if user.is_staff %}
+                    <li class="nav-item">
+                        <a href="{% url 'marketplace:admin_product_list' %}"
+                            class="btn btn-outline-light me-2">Admin</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+                <div class="ms-3">
+                    {% if user.is_authenticated %}
+                    <a href="/accounts/dashboard/" class="btn btn-outline-light me-2">Dashboard</a>
+                    <a href="/accounts/logout/" class="btn btn-light">Logout</a>
+                    {% else %}
+                    <a href="/accounts/login/" class="btn btn-outline-light me-2">Log In</a>
+                    <a href="/accounts/register/" class="btn btn-light">Start Selling</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <span class="badge bg-warning text-dark mb-3">
+                        <i class="bi bi-globe"></i> NIGERIA'S #1 LOCAL MARKETPLACE
+                    </span>
+                    <h1 class="hero-title">
+                        Find Any Good,<br>
+                        <span class="highlight">Anywhere</span> in Nigeria
+                    </h1>
+                    <p class="lead mb-4">
+                        Connect with verified sellers across all 36 states. Buy local, sell smart —
+                        with delivery options and AI-powered business guidance.
+                    </p>
+
+                    <!-- Search Box -->
+                    <form class="search-box mb-4" action="{% url 'marketplace:search_products' %}" method="GET">
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <input type="text" name="q" class="form-control"
+                                    placeholder="Search goods, products, markets...">
+                            </div>
+                            <div class="col-md-4">
+                                <select name="state" class="form-select">
+                                    <option value="">All States</option>
+                                    <option value="Lagos">Lagos</option>
+                                    <option value="Abuja">Abuja</option>
+                                    <option value="Kano">Kano</option>
+                                    <option value="Rivers">Rivers</option>
+                                    <option value="Oyo">Oyo</option>
+                                    <option value="Anambra">Anambra</option>
+                                    <option value="Delta">Delta</option>
+                                    <option value="Kaduna">Kaduna</option>
+                                    <option value="Enugu">Enugu</option>
+                                    <option value="Ogun">Ogun</option>
+                                    <option value="Ogun">Abia</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-success w-100">Search</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="d-flex gap-3 flex-wrap">
+                        <span><i class="bi bi-check-circle text-warning"></i> 12,000+ Verified Sellers</span>
+                        <span><i class="bi bi-check-circle text-warning"></i> 36 States Covered</span>
+                        <span><i class="bi bi-check-circle text-warning"></i> Free to Join</span>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="col-lg-6 mt-5 mt-lg-0">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="stats-card text-center">
+                                <i class="bi bi-box fs-1 text-warning"></i>
+                                <div class="stats-number">{{ total_products }}+</div>
+                                <div>Active Listings</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stats-card text-center">
+                                <i class="bi bi-patch-check fs-1 text-success"></i>
+                                <div class="stats-number">12,400+</div>
+                                <div>Verified Sellers</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stats-card text-center">
+                                <i class="bi bi-geo-alt fs-1 text-info"></i>
+                                <div class="stats-number">36</div>
+                                <div>States Covered</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stats-card text-center">
+                                <i class="bi bi-bag-check fs-1 text-danger"></i>
+                                <div class="stats-number">230K+</div>
+                                <div>Orders Completed</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Listings -->
+    <section class="py-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <span class="section-label">Live Today</span>
+                    <h2 class="section-title">Featured Listings</h2>
+                </div>
+                <a href="#" class="text-success text-decoration-none">View all <i class="bi bi-arrow-right"></i></a>
+            </div>
+
+            {% if featured_products %}
+            <div class="row g-4">
+                {% for product in featured_products %}
+                <div class="col-md-6 col-lg-3">
+                    <div class="product-card">
+                        <!-- Badge -->
+                        {% if product.is_featured %}
+                        <span class="product-badge badge-top-seller">TOP SELLER</span>
+                        {% elif product.is_verified %}
+                        <span class="product-badge badge-verified">VERIFIED</span>
+                        {% else %}
+                        <span class="product-badge badge-popular">POPULAR</span>
+                        {% endif %}
+
+                        <!-- Image -->
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" class="product-image" alt="{{ product.name }}">
+                        {% else %}
+                        <img src="https://via.placeholder.com/400x300?text=No+Image" class="product-image"
+                            alt="{{ product.name }}">
+                        {% endif %}
+
+                        <!-- Card Body -->
+                        <div class="product-card-body">
+                            <span class="product-category">{{ product.category }}</span>
+                            <h5 class="product-title">{{ product.name }}</h5>
+                            <p class="product-seller">{{ product.seller.business_name }}</p>
+                            <div class="product-rating">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <span class="text-muted">({{ product.id|add:50 }})</span>
+                            </div>
+                            <p class="product-location mb-2">
+                                <i class="bi bi-geo-alt"></i> {{ product.seller.location }}
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="product-price">₦{{ product.price }}</span>
+                                {% if product.seller.offers_delivery %}
+                                <span class="delivery-badge">
+                                    <i class="bi bi-truck"></i> Delivery
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-box display-1 text-muted"></i>
+                <h3 class="mt-3">No Products Yet</h3>
+                <p class="text-muted">Be the first to list a product!</p>
+                <a href="/accounts/register/" class="btn btn-primary-green">Start Selling</a>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="section-label">How It Works</span>
+                <h2 class="section-title">Built for Nigerian Commerce</h2>
+                <p class="text-muted">Whether you buy or sell, NaijaMarket makes local trade fast and transparent.</p>
+            </div>
+
+            <div class="row">
+                <!-- For Buyers -->
+                <div class="col-lg-6">
+                    <h3 class="text-center mb-4">
+                        <span class="text-success">FOR BUYERS</span>
+                    </h3>
+                    <div class="d-flex mb-4">
+                        <div class="step-icon me-3">
+                            <i class="bi bi-search text-success"></i>
+                        </div>
+                        <div>
+                            <h5>Search by product & location</h5>
+                            <p class="text-muted">Filter goods by category, state, or market. Find exactly what you need
+                                near you.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-4">
+                        <div class="step-icon me-3">
+                            <i class="bi bi-geo-alt text-success"></i>
+                        </div>
+                        <div>
+                            <h5>See seller location</h5>
+                            <p class="text-muted">View the exact market or address. Message directly via WhatsApp.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="step-icon me-3">
+                            <i class="bi bi-truck text-success"></i>
+                        </div>
+                        <div>
+                            <h5>Pick up or get delivery</h5>
+                            <p class="text-muted">Collect in person or request delivery — sellers set their own delivery
+                                options.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- For Sellers -->
+                <div class="col-lg-6">
+                    <h3 class="text-center mb-4">
+                        <span class="text-warning">FOR SELLERS</span>
+                    </h3>
+                    <div class="d-flex mb-4">
+                        <div class="step-icon seller me-3">
+                            <i class="bi bi-camera text-warning"></i>
+                        </div>
+                        <div>
+                            <h5>Upload your product</h5>
+                            <p class="text-muted">Add photos, price, and description in under 5 minutes. No technical
+                                skills needed.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-4">
+                        <div class="step-icon seller me-3">
+                            <i class="bi bi-geo-alt text-warning"></i>
+                        </div>
+                        <div>
+                            <h5>Add your location</h5>
+                            <p class="text-muted">Show buyers exactly where to find you — market, street, or estate.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="step-icon seller me-3">
+                            <i class="bi bi-graph-up text-warning"></i>
+                        </div>
+                        <div>
+                            <h5>Grow with NaijaAI</h5>
+                            <p class="text-muted">Get AI-powered business advice, marketing tips, and location
+                                recommendations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Business Advisor -->
+    <section class="ai-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-5">
+                    <span class="badge bg-warning text-dark mb-3">AI BUSINESS ADVISOR</span>
+                    <h2 class="display-5 mb-4">
+                        Your Personal <span class="text-warning">Business Coach</span>,<br>
+                        Powered by AI
+                    </h2>
+                    <p class="lead mb-4">
+                        NaijaAI understands the Nigerian market. Get a custom business plan based on your dream,
+                        location, and budget — plus location recommendations and marketing strategies that actually
+                        work.
+                    </p>
+                    <div class="mb-3">
+                        <i class="bi bi-graph-up text-warning me-2"></i>
+                        <strong>Business Plan Generator</strong>
+                        <p class="text-white-50 ms-4">Complete plans tailored to your product and Nigerian market</p>
+                    </div>
+                    <div class="mb-3">
+                        <i class="bi bi-geo-alt text-warning me-2"></i>
+                        <strong>Location Intelligence</strong>
+                        <p class="text-white-50 ms-4">AI-ranked best markets and cities for your specific trade</p>
+                    </div>
+                    <div class="mb-3">
+                        <i class="bi bi-lightning text-warning me-2"></i>
+                        <strong>Marketing Playbook</strong>
+                        <p class="text-white-50 ms-4">WhatsApp, Instagram, and local marketing strategies</p>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="ai-chat-box">
+                        <div class="d-flex align-items-center mb-4">
+                            <i class="bi bi-robot fs-3 text-warning me-2"></i>
+                            <h5 class="mb-0">NaijaAI — Business Advisor</h5>
+                        </div>
+                        <div class="chat-message">
+                            <p class="mb-0">Hello! I'm NaijaAI. Tell me about your dream business and I'll help you
+                                build it.</p>
+                        </div>
+                        <div class="chat-message user ms-auto">
+                            <p class="mb-0">I want to sell fresh fish in Port Harcourt</p>
+                        </div>
+                        <div class="chat-message">
+                            <p class="mb-0">Great choice! Port Harcourt is Nigeria's 3rd largest fish market. Based on
+                                my data:</p>
+                            <ul class="mb-0 mt-2">
+                                <li>📍 Best location: Mile 1 Market (highest foot traffic)</li>
+                                <li>💰 Startup estimate: ₦150K–₦300K</li>
+                                <li>📊 Avg. daily revenue: ₦25,000–₦60,000</li>
+                            </ul>
+                            <p class="mt-2 mb-0">Want me to generate your full business plan?</p>
+                        </div>
+                        <a href="/chatbot/" class="btn btn-warning mt-3">Try NaijaAI Now — It's Free!</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="section-label">Testimonials</span>
+                <h2 class="section-title">Trusted by Traders Across Nigeria</h2>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="testimonial-card h-100">
+                        <div class="text-warning mb-3">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="mb-4">"I listed my farm produce and got 12 messages in the first week. NaijaMarket
+                            changed my business completely."</p>
+                        <div class="d-flex align-items-center">
+                            <div class="bg-secondary rounded-circle me-3" style="width: 50px; height: 50px;"></div>
+                            <div>
+                                <h6 class="mb-0">Chukwuemeka Obi</h6>
+                                <small class="text-muted">Tomato Seller, Anambra</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card h-100">
+                        <div class="text-warning mb-3">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="mb-4">"The AI advisor helped me write a proper business plan. I now have a registered
+                            business and two shop attendants!"</p>
+                        <div class="d-flex align-items-center">
+                            <div class="bg-secondary rounded-circle me-3" style="width: 50px; height: 50px;"></div>
+                            <div>
+                                <h6 class="mb-0">Fatima Al-Hassan</h6>
+                                <small class="text-muted">Fabric Merchant, Kano</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card h-100">
+                        <div class="text-warning mb-3">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="mb-4">"The business plan was worth every kobo. Featured placement gets me 5x more
+                            traffic than before."</p>
+                        <div class="d-flex align-items-center">
+                            <div class="bg-secondary rounded-circle me-3" style="width: 50px; height: 50px;"></div>
+                            <div>
+                                <h6 class="mb-0">Emeka Duru</h6>
+                                <small class="text-muted">Electronics Dealer, Lagos</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="display-5 mb-3">Start Selling Across Nigeria Today</h2>
+            <p class="lead text-muted mb-4">
+                Join 12,000+ traders already growing their business on NaijaMarket.
+                Free to start — upgrade when you're ready.
+            </p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="/accounts/register/" class="btn btn-primary-green btn-lg">
+                    List Your First Product <i class="bi bi-arrow-right"></i>
+                </a>
+                <a href="#" class="btn btn-outline-green btn-lg">
+                    Browse Marketplace
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5 class="mb-3">
+                        <i class="bi bi-shop text-warning"></i> NaijaMarket
+                    </h5>
+                    <p class="text-white-50">
+                        Nigeria's marketplace for local goods — connecting traders and buyers across all 36 states.
+                    </p>
+                    <div class="d-flex gap-3 mt-3">
+                        <a href="#" class="fs-5"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="fs-5"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="fs-5"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="fs-5"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="mb-3">MARKETPLACE</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">All Products</a></li>
+                        <li class="mb-2"><a href="#">Food & Agro</a></li>
+                        <li class="mb-2"><a href="#">Electronics</a></li>
+                        <li class="mb-2"><a href="#">Fashion</a></li>
+                        <li class="mb-2"><a href="#">Building Materials</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="mb-3">SELLERS</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Start Selling</a></li>
+                        <li class="mb-2"><a href="#">Pricing</a></li>
+                        <li class="mb-2"><a href="#">Seller Guide</a></li>
+                        <li class="mb-2"><a href="#">NaijaAI Advisor</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="mb-3">COMPANY</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">About Us</a></li>
+                        <li class="mb-2"><a href="#">Contact</a></li>
+                        <li class="mb-2"><a href="#">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="mb-3">PAYMENTS</h6>
+                    <p class="text-white-50">
+                        <i class="bi bi-shield-check text-warning"></i>
+                        Payments secured by Paystack & Flutterwave
+                    </p>
+                </div>
+            </div>
+            <hr class="my-4 border-secondary">
+            <div class="row">
+                <div class="col-md-6 text-white-50">
+                    &copy; 2026 NaijaMarket. Made with care for Nigeria.
+                </div>
+                <div class="col-md-6 text-md-end text-white-50">
+                    <i class="bi bi-shield-lock text-warning"></i> Secure & Encrypted
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float Button -->
+    <a href="https://wa.me/2348000000000" class="whatsapp-float" target="_blank">
+        <i class="bi bi-whatsapp"></i>
+    </a>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

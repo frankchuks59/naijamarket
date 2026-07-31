@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} - NaijaMarket{% endblock %}
+
+{% block content %}
+<!-- Navbar -->
+<nav class="navbar navbar-custom">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="bi bi-shop"></i> NaijaMarket
+        </a>
+        <div>
+            <a href="{% url 'marketplace:home' %}" class="btn btn-outline-light">Back to Home</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Product Detail -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Product Image -->
+            <div class="col-lg-6 mb-4">
+                <div class="card border-0 shadow">
+                    <div class="card-body p-0">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" class="img-fluid w-100" alt="{{ product.name }}"
+                            style="border-radius: 10px;">
+                        {% else %}
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+                            <i class="bi bi-image display-1 text-muted"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Seller Info Card -->
+                <div class="card border-0 shadow mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">
+                            <i class="bi bi-person-circle"></i> Seller Information
+                        </h5>
+                        <div class="d-flex align-items-center mt-3">
+                            <div class="bg-success rounded-circle d-flex align-items-center justify-content-center"
+                                style="width: 60px; height: 60px; color: white; font-size: 1.5rem;">
+                                {{ product.seller.username|first|upper }}
+                            </div>
+                            <div class="ms-3">
+                                <h6 class="mb-0">{{
+                                    product.seller.seller_profile.business_name|default:product.seller.username }}</h6>
+                                <p class="text-muted mb-0">
+                                    <i class="bi bi-geo-alt text-success"></i> {{
+                                    product.seller.seller_profile.location|default:product.location }}
+                                </p>
+                                {% if product.seller.seller_profile.is_verified %}
+                                <span class="badge bg-success"><i class="bi bi-patch-check"></i> Verified Seller</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <a href="tel:{{ product.seller.seller_profile.phone }}" class="btn btn-success me-2">
+                                <i class="bi bi-telephone"></i> Call Seller
+                            </a>
+                            <a href="https://wa.me/234{{ product.seller.seller_profile.phone|slice:'1:' }}"
+                                class="btn btn-outline-success">
+                                <i class="bi bi-whatsapp"></i> WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <span class="badge bg-success">{{ product.get_category_display }}</span>
+                    {% if product.is_featured %}
+                    <span class="badge bg-warning text-dark">Featured</span>
+                    {% endif %}
+                    {% if product.is_verified %}
+                    <span class="badge bg-info">Verified</span>
+                    {% endif %}
+                </div>
+
+                <h1 class="fw-bold mb-3">{{ product.name }}</h1>
+
+                <div class="mb-4">
+                    <h2 class="text-success fw-bold">₦{{ product.price }}</h2>
+                    {% if product.stock_available %}
+                    <span class="badge bg-success"><i class="bi bi-check-circle"></i> In Stock</span>
+                    {% else %}
+                    <span class="badge bg-danger"><i class="bi bi-x-circle"></i> Out of Stock</span>
+                    {% endif %}
+                </div>
+
+                <div class="card bg-light mb-4">
+                    <div class="card-body">
+                        <h6 class="fw-bold"><i class="bi bi-geo-alt"></i> Location</h6>
+                        <p class="mb-0">{{ product.location }}, {{ product.state }}</p>
+                    </div>
+                </div>
+
+                {% if product.offers_delivery %}
+                <div class="card bg-light mb-4">
+                    <div class="card-body">
+                        <h6 class="fw-bold"><i class="bi bi-truck"></i> Delivery Available</h6>
+                        <p class="mb-0">Delivery fee: ₦{{ product.delivery_fee|default:"Negotiable" }}</p>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="mb-4">
+                    <h5 class="fw-bold">Description</h5>
+                    <p class="text-muted">{{ product.description|linebreaks }}</p>
+                </div>
+
+                <div class="card bg-light mb-4">
+                    <div class="card-body">
+                        <h6 class="fw-bold"><i class="bi bi-info-circle"></i> Product Details</h6>
+                        <table class="table table-borderless mb-0">
+                            <tr>
+                                <td class="text-muted">Category:</td>
+                                <td><strong>{{ product.get_category_display }}</strong></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">State:</td>
+                                <td><strong>{{ product.state }}</strong></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Listed:</td>
+                                <td><strong>{{ product.created_at|date:"M d, Y" }}</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-grid gap-2">
+                    {% if user.is_authenticated and user == product.seller or user.is_admin %}
+                    <a href="{% url 'marketplace:edit_product' product.id %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-pencil"></i> Edit Product
+                    </a>
+                    <a href="{% url 'marketplace:delete_product' product.id %}" class="btn btn-outline-danger btn-lg">
+                        <i class="bi bi-trash"></i> Delete Product
+                    </a>
+                    {% else %}
+                    <a href="tel:{{ product.seller.seller_profile.phone }}" class="btn btn-success btn-lg">
+                        <i class="bi bi-telephone"></i> Contact Seller
+                    </a>
+                    <a href="https://wa.me/234{{ product.seller.seller_profile.phone|slice:'1:' }}"
+                        class="btn btn-outline-success btn-lg">
+                        <i class="bi bi-whatsapp"></i> Chat on WhatsApp
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Similar Products -->
+        {% if similar_products %}
+        <div class="mt-5">
+            <h3 class="fw-bold mb-4">Similar Products</h3>
+            <div class="row g-4">
+                {% for similar in similar_products %}
+                <div class="col-md-3">
+                    <div class="product-card">
+                        {% if similar.image %}
+                        <img src="{{ similar.image.url }}" class="product-image" alt="{{ similar.name }}">
+                        {% else %}
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="bi bi-image display-4 text-muted"></i>
+                        </div>
+                        {% endif %}
+                        <div class="product-card-body">
+                            <h6 class="product-title">{{ similar.name }}</h6>
+                            <p class="text-success fw-bold">₦{{ similar.price }}</p>
+                            <p class="text-muted small mb-0">
+                                <i class="bi bi-geo-alt"></i> {{ similar.location }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

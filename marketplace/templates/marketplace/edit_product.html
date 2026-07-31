@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Product - NaijaMarket{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-custom">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="bi bi-shop"></i> NaijaMarket
+        </a>
+        <div>
+            <a href="{% url 'accounts:dashboard' %}" class="btn btn-outline-light">Back to Dashboard</a>
+        </div>
+    </div>
+</nav>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-header bg-warning text-dark py-3">
+                        <h4 class="mb-0"><i class="bi bi-pencil"></i> Edit Product</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Product Name *</label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                <div class="text-danger small">{{ form.name.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Category *</label>
+                                    {{ form.category }}
+                                    {% if form.category.errors %}
+                                    <div class="text-danger small">{{ form.category.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Price (₦) *</label>
+                                    {{ form.price }}
+                                    {% if form.price.errors %}
+                                    <div class="text-danger small">{{ form.price.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Description *</label>
+                                {{ form.description }}
+                                {% if form.description.errors %}
+                                <div class="text-danger small">{{ form.description.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Product Image</label>
+                                {{ form.image }}
+                                {% if form.image.errors %}
+                                <div class="text-danger small">{{ form.image.errors }}</div>
+                                {% endif %}
+                                {% if product.image %}
+                                <div class="mt-2">
+                                    <img src="{{ product.image.url }}" alt="Current image" class="img-thumbnail"
+                                        style="max-height: 150px;">
+                                    <p class="text-muted small">Leave empty to keep current image</p>
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">State *</label>
+                                    {{ form.state }}
+                                    {% if form.state.errors %}
+                                    <div class="text-danger small">{{ form.state.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Location/Area *</label>
+                                    {{ form.location }}
+                                    {% if form.location.errors %}
+                                    <div class="text-danger small">{{ form.location.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="card bg-light mb-3">
+                                <div class="card-body">
+                                    <h6 class="card-title fw-bold"><i class="bi bi-truck"></i> Delivery Options</h6>
+
+                                    <div class="form-check mb-2">
+                                        {{ form.offers_delivery }}
+                                        <label class="form-check-label" for="{{ form.offers_delivery.id_for_label }}">
+                                            I offer delivery services
+                                        </label>
+                                    </div>
+
+                                    <div id="deliveryFeeBox" style="display: none;">
+                                        <label class="form-label">Delivery Fee (₦)</label>
+                                        {{ form.delivery_fee }}
+                                        {% if form.delivery_fee.errors %}
+                                        <div class="text-danger small">{{ form.delivery_fee.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-check mb-4">
+                                {{ form.stock_available }}
+                                <label class="form-check-label" for="{{ form.stock_available.id_for_label }}">
+                                    Product is currently in stock
+                                </label>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-warning btn-lg px-4">
+                                    <i class="bi bi-check-circle"></i> Update Product
+                                </button>
+                                <a href="{% url 'accounts:dashboard' %}" class="btn btn-outline-secondary btn-lg px-4">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Image Preview
+    const imageInput = document.getElementById('{{ form.image.id_for_label }}');
+    if (imageInput) {
+        imageInput.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    let preview = document.getElementById('imagePreview');
+                    if (!preview) {
+                        preview = document.createElement('div');
+                        preview.id = 'imagePreview';
+                        preview.className = 'mt-2';
+                        preview.innerHTML = '<img id="previewImg" class="img-thumbnail" style="max-height: 150px;">';
+                        imageInput.parentNode.appendChild(preview);
+                    }
+                    document.getElementById('previewImg').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Show/Hide Delivery Fee
+    const deliveryCheck = document.getElementById('{{ form.offers_delivery.id_for_label }}');
+    if (deliveryCheck) {
+        deliveryCheck.addEventListener('change', function () {
+            document.getElementById('deliveryFeeBox').style.display = this.checked ? 'block' : 'none';
+        });
+
+        // Initialize on load
+        if (deliveryCheck.checked) {
+            document.getElementById('deliveryFeeBox').style.display = 'block';
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - NaijaMarket{% endblock %}
+
+{% block content %}
+<!-- Navbar -->
+<nav class="navbar navbar-custom">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="bi bi-shop"></i> NaijaMarket
+        </a>
+        <div>
+            <a href="{% url 'marketplace:home' %}" class="btn btn-outline-light me-2">Home</a>
+            <a href="{% url 'accounts:logout' %}" class="btn btn-light">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Dashboard Content -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="card border-0 shadow">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center"
+                            style="width: 80px; height: 80px; color: white; font-size: 2rem;">
+                            {{ user.username|first|upper }}
+                        </div>
+                        <h5 class="mt-3 mb-1">{{ user.username }}</h5>
+                        <span class="badge bg-success">{{ user.get_role_display }}</span>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow mt-3">
+                    <div class="list-group list-group-flush">
+                        <a href="#" class="list-group-item list-group-item-action active">
+                            <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <i class="bi bi-box me-2"></i> My Products
+                        </a>
+                        <a href="{% url 'marketplace:add_product' %}" class="btn btn-success btn-sm">
+                            <i class="bi bi-plus-circle"></i> Add Product
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <i class="bi bi-gear me-2"></i> Settings
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                <!-- Stats Cards -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-success bg-opacity-10 p-3 rounded">
+                                        <i class="bi bi-box fs-3 text-success"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 class="text-muted mb-0">Total Products</h6>
+                                        <h3 class="mb-0">{{ user_products.count }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-warning bg-opacity-10 p-3 rounded">
+                                        <i class="bi bi-eye fs-3 text-warning"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 class="text-muted mb-0">Profile Views</h6>
+                                        <h3 class="mb-0">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-info bg-opacity-10 p-3 rounded">
+                                        <i class="bi bi-chat fs-3 text-info"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 class="text-muted mb-0">Messages</h6>
+                                        <h3 class="mb-0">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Table -->
+                <div class="card border-0 shadow">
+                    <div class="card-header bg-white py-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">My Products</h5>
+                            <a href="#" class="btn btn-success btn-sm">
+                                <i class="bi bi-plus-circle"></i> Add Product
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {% if user_products %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in user_products %}
+                                    <tr>
+                                        <td>
+                                            <strong>{{ product.name }}</strong>
+                                        </td>
+                                        <td>{{ product.get_category_display }}</td>
+                                        <td>₦{{ product.price }}</td>
+                                        <td>
+                                            {% if product.is_featured %}
+                                            <span class="badge bg-warning">Featured</span>
+                                            {% elif product.is_verified %}
+                                            <span class="badge bg-success">Verified</span>
+                                            {% else %}
+                                            <span class="badge bg-secondary">Active</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'marketplace:edit_product' product.id %}"
+                                                class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-pencil"></i> Edit
+                                            </a>
+                                            <a href="{% url 'marketplace:delete_product' product.id %}"
+                                                class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i> Delete
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div class="text-center py-5">
+                            <i class="bi bi-box display-1 text-muted"></i>
+                            <h5 class="mt-3">No products yet</h5>
+                            <p class="text-muted">Start by adding your first product!</p>
+                            <a href="{% url 'marketplace:add_product' %}" class="btn btn-success">Add Your First
+                                Product</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
