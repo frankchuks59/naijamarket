@@ -9,7 +9,7 @@ from django.conf import settings
 from accounts.forms import RegisterForm, LoginForm
 
 def register(request):
-    """User registration with OTP"""
+    """User registration - Email temporarily disabled"""
     if request.user.is_authenticated:
         return redirect('marketplace:home')
     
@@ -17,26 +17,18 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.is_active = False  # Inactive until OTP verified
+            # TEMPORARY: Skip OTP, activate immediately
+            user.is_active = True
+            user.otp_verified = True
             user.save()
             
-            # Generate and send OTP
-            otp = user.generate_otp()
+            # Login directly - NO EMAIL
+            login(request, user)
+            messages.success(request, f'Welcome to NaijaMarket, {user.username}! 🎉')
             
-            # Send OTP via email
-            send_mail(
-                subject='Verify Your NaijaMarket Account',
-                message=f'Your OTP code is: {otp}\n\nThis code expires in 5 minutes.\n\nWelcome to NaijaMarket!',
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[user.email],
-                fail_silently=False,
-            )
-            
-            # Store user ID in session for OTP verification
-            request.session['otp_user_id'] = user.id
-            
-            messages.success(request, f'Account created! OTP sent to {user.email}. Check your inbox.')
-            return redirect('accounts:verify_otp')
+            if user.role == 'seller':
+                return redirect('accounts:complete_profile')
+            return redirect('marketplace:home')
     else:
         form = RegisterForm()
     
