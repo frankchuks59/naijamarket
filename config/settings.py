@@ -172,8 +172,6 @@ EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'NaijaMarket <noreply@naijamarket.com>')
-# WhiteNoise configuration
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Cloudinary Configuration
 import cloudinary
@@ -182,10 +180,10 @@ import cloudinary.uploader
 cloudinary.config(
     cloud_name='kmn3lvnj',
     api_key='526428454831589',
-    api_secret='1VcrT1JwbhqftPe9OehNT3mXetA'
+    api_secret='YOUR_API_SECRET_HERE',  # Replace with your actual secret
 )
 
-# For Django 4.2+ use STORAGES instead of DEFAULT_FILE_STORAGE
+# Use STORAGES for Django 4.2+ (this handles BOTH default and static files)
 STORAGES = {
     'default': {
         'BACKEND': 'cloudinary_storage.storage.MediaStorage',
