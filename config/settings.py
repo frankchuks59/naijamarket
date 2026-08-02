@@ -17,6 +17,7 @@ import dj_database_url
 from pathlib import Path
 from decouple import config  # For environment variables
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY: Keep secret key in environment variable
@@ -174,13 +175,26 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'NaijaMarket <noreply@naija
 # WhiteNoise configuration
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Cloudinary Configuration
+
+# Cloudinary Configuration
 import cloudinary
 import cloudinary.uploader
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME', 'kmn3lvnj'),
-    'API_KEY': os.getenv('CLOUDINARY_API_KEY', '526428454831589'),
-    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET', ''),
+cloudinary.config(
+    cloud_name='kmn3lvnj',
+    api_key='526428454831589',
+    api_secret='1VcrT1JwbhqftPe9OehNT3mXetA'
+)
+
+# For Django 4.2+ use STORAGES instead of DEFAULT_FILE_STORAGE
+STORAGES = {
+    'default': {
+        'BACKEND': 'cloudinary_storage.storage.MediaStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
 }
 
+# Fallback for older Django versions
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaStorage'
