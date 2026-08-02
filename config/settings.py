@@ -180,7 +180,7 @@ import cloudinary.uploader
 cloudinary.config(
     cloud_name='kmn3lvnj',
     api_key='526428454831589',
-    api_secret='YOUR_API_SECRET_HERE',  # Replace with your actual secret
+    api_secret='1VcrT1JwbhqftPe9OehNT3mXetA'
 )
 
 # Use STORAGES for Django 4.2+ (this handles BOTH default and static files)
