@@ -6,6 +6,23 @@ A full-stack marketplace platform connecting buyers and sellers across Nigeria's
 
 ---
 
+## 📸 Screenshots
+
+### Homepage
+![Homepage](screenshots/home.png)
+
+### How It Works
+![How It Works](screenshots/image.png)
+
+### Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### Admin Panel
+![Admin](screenshots/admin.png)
+
+### Chatbot
+![Chatbot](screenshots/chatbot.png)
+
 ## ✨ Features
 
 ### For Buyers
