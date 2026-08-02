@@ -175,11 +175,12 @@
                         {% endif %}
 
                         <!-- Image -->
-                        {% if product.image %}
+                        {% if product.image and product.image.url %}
                         <img src="{{ product.image.url }}" class="product-image" alt="{{ product.name }}">
                         {% else %}
-                        <img src="https://via.placeholder.com/400x300?text=No+Image" class="product-image"
-                            alt="{{ product.name }}">
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="bi bi-image display-4 text-muted"></i>
+                        </div>
                         {% endif %}
 
                         <!-- Card Body -->

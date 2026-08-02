@@ -65,9 +65,6 @@ INSTALLED_APPS = [
     'django_otp.plugins.otp_totp',
     'django_otp.plugins.otp_static',
     'two_factor',
-    #
-    'cloudinary',
-    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -173,22 +170,28 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'NaijaMarket <noreply@naijamarket.com>')
 
-# Cloudinary Configuration
-import cloudinary
-import cloudinary.uploader
+# Simple media file configuration (for development only)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
-cloudinary.config(
-    cloud_name='kmn3lvnj',
-    api_key='526428454831589',
-    api_secret='1VcrT1JwbhqftPe9OehNT3mXetA'
-)
+# For production, images won't persist (that's okay for portfolio)
+
+# Cloudinary Configuration
+#import cloudinary
+#import cloudinary.uploader
+
+#cloudinary.config(
+    #cloud_name='kmn3lvnj',
+    #api_key='526428454831589',
+    #api_secret='1VcrT1JwbhqftPe9OehNT3mXetA'
+#)
 
 # Use STORAGES for Django 4.2+ (this handles BOTH default and static files)
-STORAGES = {
-    'default': {
-        'BACKEND': 'cloudinary_storage.storage.MediaStorage',
-    },
-    'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
-    },
-}
+#STORAGES = {
+ #   'default': {
+  #      'BACKEND': 'cloudinary_storage.storage.MediaStorage',
+   # },
+    #'staticfiles': {
+     #   'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    #},
+#}
