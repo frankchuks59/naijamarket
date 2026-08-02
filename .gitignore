@@ -10,18 +10,16 @@ env/
 # Django
 db.sqlite3
 staticfiles/
-media/
 
-# Environment
 .env
 *.env
 
-# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# OS
 .DS_Store
 Thumbs.db
+
+media/
