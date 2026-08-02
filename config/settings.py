@@ -174,7 +174,6 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'NaijaMarket <noreply@naijamarket.com>')
 # WhiteNoise configuration
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-# Cloudinary Configuration
 
 # Cloudinary Configuration
 import cloudinary
@@ -195,6 +194,3 @@ STORAGES = {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
     },
 }
-
-# Fallback for older Django versions
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaStorage'
